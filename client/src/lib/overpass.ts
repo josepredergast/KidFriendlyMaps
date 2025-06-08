@@ -12,7 +12,7 @@ export const ACTIVITY_CONFIGS = {
   playground: {
     label: 'Playgrounds',
     description: 'Outdoor play areas',
-    color: 'hsl(220, 100%, 45%)', // Dark blue
+    color: 'hsl(0, 0%, 100%)', // White
     icon: '🛝',
     query: 'leisure=playground'
   },
