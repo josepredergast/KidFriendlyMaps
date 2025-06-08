@@ -12,42 +12,42 @@ export const ACTIVITY_CONFIGS = {
   playground: {
     label: 'Playgrounds',
     description: 'Outdoor play areas',
-    color: 'hsl(142, 71%, 45%)',
+    color: 'hsl(220, 100%, 45%)', // Dark blue
     icon: '🛝',
     query: 'leisure=playground'
   },
   park: {
     label: 'Parks',
     description: 'Green spaces & recreation',
-    color: 'hsl(158, 64%, 52%)',
+    color: 'hsl(120, 70%, 35%)', // Forest green
     icon: '🌳',
     query: 'leisure=park'
   },
   museum: {
     label: 'Museums',
     description: 'Educational exhibitions',
-    color: 'hsl(262, 83%, 58%)',
+    color: 'hsl(45, 100%, 50%)', // Bright yellow
     icon: '🏛️',
     query: 'tourism=museum'
   },
   gallery: {
     label: 'Galleries',
     description: 'Art & cultural spaces',
-    color: 'hsl(291, 64%, 42%)',
+    color: 'hsl(320, 80%, 45%)', // Magenta
     icon: '🖼️',
     query: 'tourism=gallery'
   },
   science: {
     label: 'Science Centers',
     description: 'Interactive learning',
-    color: 'hsl(43, 96%, 56%)',
+    color: 'hsl(15, 85%, 55%)', // Orange-red
     icon: '🔬',
     query: 'amenity=science_center'
   },
   planetarium: {
     label: 'Planetariums',
     description: 'Space & astronomy',
-    color: 'hsl(325, 84%, 65%)',
+    color: 'hsl(280, 70%, 50%)', // Purple
     icon: '🌟',
     query: 'amenity=planetarium'
   }
