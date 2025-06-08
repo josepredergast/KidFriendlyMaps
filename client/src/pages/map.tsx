@@ -1,9 +1,12 @@
+import React, { useState } from 'react';
 import { Sidebar } from '@/components/sidebar';
 import { MapContainer } from '@/components/map-container';
 import { usePlaces } from '@/hooks/use-places';
 import type { Place } from '@shared/types';
 
 export default function MapPage() {
+  const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
+  
   const {
     places,
     allPlaces,
@@ -17,8 +20,7 @@ export default function MapPage() {
   } = usePlaces();
 
   const handlePlaceSelect = (place: Place) => {
-    // This will be implemented to focus the map on the selected place
-    console.log('Selected place:', place);
+    setSelectedPlace(place);
   };
 
   return (
@@ -34,7 +36,11 @@ export default function MapPage() {
         places={allPlaces}
         onPlaceSelect={handlePlaceSelect}
       />
-      <MapContainer places={places} isLoading={isLoading} />
+      <MapContainer 
+        places={places} 
+        isLoading={isLoading} 
+        selectedPlace={selectedPlace}
+      />
     </div>
   );
 }

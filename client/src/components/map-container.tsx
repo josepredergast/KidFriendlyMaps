@@ -15,9 +15,10 @@ L.Icon.Default.mergeOptions({
 interface MapContainerProps {
   places: Place[];
   isLoading: boolean;
+  selectedPlace?: Place | null;
 }
 
-export function MapContainer({ places, isLoading }: MapContainerProps) {
+export function MapContainer({ places, isLoading, selectedPlace }: MapContainerProps) {
   const mapRef = useRef<L.Map | null>(null);
   const markersRef = useRef<L.LayerGroup | null>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -102,6 +103,25 @@ export function MapContainer({ places, isLoading }: MapContainerProps) {
       markersRef.current?.addLayer(marker);
     });
   }, [places]);
+
+  // Handle selected place focusing
+  useEffect(() => {
+    if (!mapRef.current || !selectedPlace) return;
+
+    const map = mapRef.current;
+    map.setView([selectedPlace.lat, selectedPlace.lon], 16);
+
+    // Find and open the popup for the selected place
+    markersRef.current?.eachLayer((layer: any) => {
+      if (layer.options && layer.getLatLng) {
+        const latLng = layer.getLatLng();
+        if (Math.abs(latLng.lat - selectedPlace.lat) < 0.0001 && 
+            Math.abs(latLng.lng - selectedPlace.lon) < 0.0001) {
+          setTimeout(() => layer.openPopup(), 300);
+        }
+      }
+    });
+  }, [selectedPlace]);
 
   const createPopupContent = (place: Place, config: typeof ACTIVITY_CONFIGS[keyof typeof ACTIVITY_CONFIGS]) => {
     const hasDetails = place.address || place.phone || place.website || place.description;
