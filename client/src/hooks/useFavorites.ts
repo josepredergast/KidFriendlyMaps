@@ -52,8 +52,31 @@ export function useFavorites() {
     },
   });
 
+  const toggleVisitedMutation = useMutation({
+    mutationFn: async (placeId: string | number) => {
+      const response = await fetch(`/api/favorites/${placeId}/visited`, {
+        method: "PATCH",
+        credentials: "include",
+      });
+      if (!response.ok) throw new Error("Failed to toggle visited status");
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/favorites"] });
+    },
+  });
+
   const isFavorite = (placeId: string | number): boolean => {
     return favorites.some((fav: Favorite) => fav.placeId === placeId.toString());
+  };
+
+  const isVisited = (placeId: string | number): boolean => {
+    const favorite = favorites.find((fav: Favorite) => fav.placeId === placeId.toString());
+    return favorite ? !!favorite.visited : false;
+  };
+
+  const getFavorite = (placeId: string | number): Favorite | undefined => {
+    return favorites.find((fav: Favorite) => fav.placeId === placeId.toString());
   };
 
   const toggleFavorite = async (place: Place) => {
@@ -64,14 +87,22 @@ export function useFavorites() {
     }
   };
 
+  const toggleVisited = async (placeId: string | number) => {
+    await toggleVisitedMutation.mutateAsync(placeId);
+  };
+
   return {
     favorites,
     isLoading,
     isFavorite,
+    isVisited,
+    getFavorite,
     toggleFavorite,
+    toggleVisited,
     addFavorite: addFavoriteMutation.mutateAsync,
     removeFavorite: removeFavoriteMutation.mutateAsync,
     isAddingFavorite: addFavoriteMutation.isPending,
     isRemovingFavorite: removeFavoriteMutation.isPending,
+    isTogglingVisited: toggleVisitedMutation.isPending,
   };
 }

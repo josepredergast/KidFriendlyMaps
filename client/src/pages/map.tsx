@@ -9,7 +9,7 @@ import type { Place } from '@shared/types';
 export default function MapPage() {
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
   const { user } = useAuth();
-  const { toggleFavorite } = useFavorites();
+  const { toggleFavorite, toggleVisited, isVisited, isFavorite } = useFavorites();
   
   const {
     places,
@@ -27,13 +27,19 @@ export default function MapPage() {
     setSelectedPlace(place);
   };
 
-  // Expose toggle favorite function to window for popup access
+  // Expose functions to window for popup access
   useEffect(() => {
     (window as any).toggleFavorite = toggleFavorite;
+    (window as any).toggleVisited = toggleVisited;
+    (window as any).isVisited = isVisited;
+    (window as any).isFavorite = isFavorite;
     return () => {
       delete (window as any).toggleFavorite;
+      delete (window as any).toggleVisited;
+      delete (window as any).isVisited;
+      delete (window as any).isFavorite;
     };
-  }, [toggleFavorite]);
+  }, [toggleFavorite, toggleVisited, isVisited, isFavorite]);
 
   return (
     <div className="flex h-screen bg-gray-50">

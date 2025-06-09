@@ -133,13 +133,23 @@ export function MapContainer({ places, isLoading, selectedPlace }: MapContainerP
             <div class="w-4 h-4 rounded-full flex-shrink-0" style="background-color: ${config.color}"></div>
             <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">${config.label.slice(0, -1)}</span>
           </div>
-          <button onclick="window.toggleFavorite && window.toggleFavorite(${JSON.stringify(place).replace(/"/g, '&quot;')})" 
-                  class="favorite-btn p-1 rounded-full hover:bg-gray-100 transition-colors"
-                  title="Save to favorites">
-            <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
-            </svg>
-          </button>
+          <div class="flex items-center space-x-1">
+            <button onclick="window.toggleFavorite && window.toggleFavorite(${JSON.stringify(place).replace(/"/g, '&quot;')})" 
+                    class="favorite-btn p-1 rounded-full hover:bg-gray-100 transition-colors"
+                    title="Save to favorites">
+              <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+              </svg>
+            </button>
+            <button onclick="window.isFavorite && window.isFavorite('${place.id}') && window.toggleVisited && window.toggleVisited('${place.id}')" 
+                    class="visited-btn p-1 rounded-full hover:bg-gray-100 transition-colors"
+                    title="Mark as visited"
+                    style="display: none;">
+              <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+            </button>
+          </div>
         </div>
         <h3 class="font-bold text-lg text-gray-900 mb-2">${place.name}</h3>
     `;
