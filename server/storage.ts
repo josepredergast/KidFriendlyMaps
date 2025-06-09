@@ -21,6 +21,7 @@ export interface IStorage {
   addFavorite(favorite: InsertFavorite): Promise<Favorite>;
   removeFavorite(userId: string, placeId: string): Promise<void>;
   isFavorite(userId: string, placeId: string): Promise<boolean>;
+  toggleVisited(userId: string, placeId: string): Promise<Favorite>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -76,6 +77,29 @@ export class DatabaseStorage implements IStorage {
       .from(favorites)
       .where(and(eq(favorites.userId, userId), eq(favorites.placeId, placeId)));
     return !!favorite;
+  }
+
+  async toggleVisited(userId: string, placeId: string): Promise<Favorite> {
+    const [favorite] = await db
+      .select()
+      .from(favorites)
+      .where(and(eq(favorites.userId, userId), eq(favorites.placeId, placeId)));
+    
+    if (!favorite) {
+      throw new Error("Favorite not found");
+    }
+
+    const newVisitedStatus = !favorite.visited;
+    const [updatedFavorite] = await db
+      .update(favorites)
+      .set({
+        visited: newVisitedStatus,
+        visitedAt: newVisitedStatus ? new Date() : null,
+      })
+      .where(and(eq(favorites.userId, userId), eq(favorites.placeId, placeId)))
+      .returning();
+
+    return updatedFavorite;
   }
 }
 

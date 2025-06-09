@@ -6,6 +6,7 @@ import {
   jsonb,
   index,
   primaryKey,
+  boolean,
 } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
@@ -45,6 +46,8 @@ export const favorites = pgTable("favorites", {
   placeLat: text("place_lat").notNull(),
   placeLon: text("place_lon").notNull(),
   placeAddress: varchar("place_address"),
+  visited: boolean("visited").default(false),
+  visitedAt: timestamp("visited_at"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 

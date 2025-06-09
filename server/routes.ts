@@ -79,6 +79,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Toggle visited status
+  app.patch('/api/favorites/:placeId/visited', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { placeId } = req.params;
+      
+      const updatedFavorite = await storage.toggleVisited(userId, placeId);
+      res.json(updatedFavorite);
+    } catch (error) {
+      console.error("Error toggling visited status:", error);
+      res.status(500).json({ message: "Failed to update visited status" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
