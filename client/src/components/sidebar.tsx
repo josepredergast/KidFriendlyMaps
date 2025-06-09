@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { X, Menu, MapPin, RefreshCw, Search } from 'lucide-react';
+import { X, Menu, MapPin, RefreshCw, Search, Heart, LogOut, User as UserIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { ACTIVITY_CONFIGS } from '@/lib/overpass';
+import { useFavorites } from '@/hooks/useFavorites';
 import type { FilterState, Place } from '@shared/types';
 
 interface SidebarProps {
@@ -17,6 +18,7 @@ interface SidebarProps {
   error: string | null;
   places: Place[];
   onPlaceSelect?: (place: Place) => void;
+  user?: any;
 }
 
 export function Sidebar({
@@ -28,10 +30,12 @@ export function Sidebar({
   totalPlaces,
   error,
   places,
-  onPlaceSelect
+  onPlaceSelect,
+  user
 }: SidebarProps) {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const { favorites } = useFavorites();
 
   const toggleMobile = () => setIsMobileOpen(!isMobileOpen);
   const closeMobile = () => setIsMobileOpen(false);
@@ -79,14 +83,26 @@ export function Sidebar({
               <h1 className="text-lg font-bold text-gray-900">Hudson County</h1>
               <p className="text-xs text-gray-600">Kid-Friendly Places</p>
             </div>
-            <Button
-              onClick={closeMobile}
-              className="lg:hidden h-6 w-6"
-              variant="ghost"
-              size="icon"
-            >
-              <X className="h-4 w-4" />
-            </Button>
+            <div className="flex items-center space-x-2">
+              {user && (
+                <Button
+                  onClick={() => window.location.href = '/api/logout'}
+                  variant="ghost"
+                  size="sm"
+                  className="h-6 px-2"
+                >
+                  <LogOut className="h-3 w-3" />
+                </Button>
+              )}
+              <Button
+                onClick={closeMobile}
+                className="lg:hidden h-6 w-6"
+                variant="ghost"
+                size="icon"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
           
           {/* Search Bar */}

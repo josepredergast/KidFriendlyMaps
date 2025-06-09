@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Sidebar } from '@/components/sidebar';
 import { MapContainer } from '@/components/map-container';
 import { usePlaces } from '@/hooks/use-places';
+import { useFavorites } from '@/hooks/useFavorites';
+import { useAuth } from '@/hooks/useAuth';
 import type { Place } from '@shared/types';
 
 export default function MapPage() {
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
+  const { user } = useAuth();
+  const { toggleFavorite } = useFavorites();
   
   const {
     places,
@@ -23,6 +27,14 @@ export default function MapPage() {
     setSelectedPlace(place);
   };
 
+  // Expose toggle favorite function to window for popup access
+  useEffect(() => {
+    (window as any).toggleFavorite = toggleFavorite;
+    return () => {
+      delete (window as any).toggleFavorite;
+    };
+  }, [toggleFavorite]);
+
   return (
     <div className="flex h-screen bg-gray-50">
       <Sidebar
@@ -35,6 +47,7 @@ export default function MapPage() {
         error={error}
         places={allPlaces}
         onPlaceSelect={handlePlaceSelect}
+        user={user}
       />
       <MapContainer 
         places={places} 
