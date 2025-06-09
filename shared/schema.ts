@@ -46,9 +46,7 @@ export const favorites = pgTable("favorites", {
   placeLon: text("place_lon").notNull(),
   placeAddress: varchar("place_address"),
   createdAt: timestamp("created_at").defaultNow(),
-}, (table) => ({
-  userPlacePk: primaryKey({ columns: [table.userId, table.placeId] })
-}));
+});
 
 // Relations
 export const usersRelations = relations(users, ({ many }) => ({
